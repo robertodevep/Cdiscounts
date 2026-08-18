@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import Header from "@/src/components/Header";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -43,7 +43,12 @@ export default function Confirmation() {
         showsVerticalScrollIndicator={false}
       >
         {/* Badge méthode */}
-        <View style={[styles.methodBadge, { backgroundColor: methodColor + "18", borderColor: methodColor }]}>
+        <View
+          style={[
+            styles.methodBadge,
+            { backgroundColor: methodColor + "18", borderColor: methodColor },
+          ]}
+        >
           <Text style={[styles.methodBadgeText, { color: methodColor }]}>
             💳 {method}
           </Text>
@@ -55,7 +60,9 @@ export default function Confirmation() {
           {parsedCart.map((item: any, index: number) => (
             <View key={index} style={styles.itemRow}>
               <View style={styles.itemLeft}>
-                <Text style={styles.itemTitle} numberOfLines={1}>{item.title}</Text>
+                <Text style={styles.itemTitle} numberOfLines={1}>
+                  {item.title}
+                </Text>
                 <Text style={styles.itemVariant}>Version : {item.variant}</Text>
               </View>
               <View style={styles.itemRight}>
@@ -69,14 +76,18 @@ export default function Confirmation() {
           <View style={styles.divider} />
           <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>Total à payer</Text>
-            <Text style={styles.totalAmount}>{Number(total).toLocaleString()} FCFA</Text>
+            <Text style={styles.totalAmount}>
+              {Number(total).toLocaleString()} FCFA
+            </Text>
           </View>
         </View>
 
         {/* Saisie numéro */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Numéro de paiement</Text>
-          <Text style={styles.inputHint}>Entrez le numéro associé à votre compte {method}</Text>
+          <Text style={styles.inputHint}>
+            Entrez le numéro associé à votre compte {method}
+          </Text>
           <View style={styles.inputWrapper}>
             <Text style={styles.inputFlag}>🇨🇲 +237</Text>
             <TextInput
@@ -108,7 +119,9 @@ export default function Confirmation() {
       <Modal visible={modal === "error"} transparent animationType="fade">
         <View style={styles.overlay}>
           <View style={styles.modalBox}>
-            <View style={[styles.modalIconCircle, { backgroundColor: "#fff0f0" }]}>
+            <View
+              style={[styles.modalIconCircle, { backgroundColor: "#fff0f0" }]}
+            >
               <Text style={styles.modalIcon}>⚠️</Text>
             </View>
             <Text style={styles.modalTitle}>Champ requis</Text>
@@ -129,13 +142,17 @@ export default function Confirmation() {
       <Modal visible={modal === "success"} transparent animationType="fade">
         <View style={styles.overlay}>
           <View style={styles.modalBox}>
-            <View style={[styles.modalIconCircle, { backgroundColor: "#f0fff4" }]}>
+            <View
+              style={[styles.modalIconCircle, { backgroundColor: "#f0fff4" }]}
+            >
               <Text style={styles.modalIcon}>✅</Text>
             </View>
             <Text style={styles.modalTitle}>Paiement en cours</Text>
             <Text style={styles.modalMessage}>
               Votre paiement via{" "}
-              <Text style={{ fontWeight: "bold", color: methodColor }}>{method}</Text>{" "}
+              <Text style={{ fontWeight: "bold", color: methodColor }}>
+                {method}
+              </Text>{" "}
               a bien été initié. Vous recevrez une confirmation par SMS.
             </Text>
 
@@ -197,9 +214,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 4,
   },
-  cardTitle: { fontSize: 15, fontWeight: "bold", color: "#111", marginBottom: 14 },
+  cardTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#111",
+    marginBottom: 14,
+  },
 
-  itemRow: { flexDirection: "row", justifyContent: "space-between", marginBottom: 12 },
+  itemRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
   itemLeft: { flex: 1, paddingRight: 10 },
   itemTitle: { fontSize: 14, fontWeight: "600", color: "#222" },
   itemVariant: { fontSize: 12, color: "#999", marginTop: 2 },
@@ -209,7 +235,11 @@ const styles = StyleSheet.create({
 
   divider: { height: 1, backgroundColor: "#f0f0f0", marginVertical: 12 },
 
-  totalRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  totalRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   totalLabel: { fontSize: 15, fontWeight: "bold", color: "#333" },
   totalAmount: { fontSize: 20, fontWeight: "bold", color: "#e60023" },
 
@@ -248,9 +278,19 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#f0f0f0",
   },
-  payBtn: { backgroundColor: "#e60023", borderRadius: 30, paddingVertical: 16, alignItems: "center" },
+  payBtn: {
+    backgroundColor: "#e60023",
+    borderRadius: 30,
+    paddingVertical: 16,
+    alignItems: "center",
+  },
   payBtnDisabled: { backgroundColor: "#ccc" },
-  payText: { color: "#fff", fontWeight: "bold", fontSize: 16, letterSpacing: 0.5 },
+  payText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+    letterSpacing: 0.5,
+  },
 
   /* ✅ Modal styles */
   overlay: {

@@ -1,6 +1,5 @@
-import Header from "@/components/Header";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Header from "@/src/components/Header";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useContext, useState } from "react";
 import {
   Image,
@@ -11,23 +10,35 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CartContext } from "../context/CartContext";
+import { CartContext } from "@/src/context/CartContext";
 
-type RootStackParamList = {
-  Produit: { product: { id: string; title: string; image: string } };
-  Panier: undefined;
+type Product = {
+  id: string;
+  title: string;
+  price: string;
+  image: string;
 };
 
-type ProductScreenRouteProp = RouteProp<RootStackParamList, "Produit">;
-type ProductScreenNavigationProp =
-  NativeStackNavigationProp<RootStackParamList>;
+export default function ProductDetailScreen() {
+  const router = useRouter();
+  const params = useLocalSearchParams<{ product?: string | string[] }>();
 
-export default function ProductScreen() {
-  const route = useRoute<ProductScreenRouteProp>();
-  const navigation = useNavigation<ProductScreenNavigationProp>();
+  const raw = Array.isArray(params.product)
+    ? params.product[0]
+    : params.product;
 
-  if (!route?.params?.product) return null;
-  const { product } = route.params;
+  if (!raw) return null;
+
+  let product: Product;
+  try {
+    product = JSON.parse(decodeURIComponent(raw));
+  } catch {
+    try {
+      product = JSON.parse(raw);
+    } catch {
+      return null;
+    }
+  }
 
   const cartContext = useContext(CartContext);
   if (!cartContext) return null;
@@ -41,7 +52,6 @@ export default function ProductScreen() {
 
   const [selectedVariant, setSelectedVariant] = useState(variants[0]);
   const [quantity, setQuantity] = useState(1);
-  // ✅ Uniquement le modal succès ici
   const [showSuccess, setShowSuccess] = useState(false);
 
   const add = () => setQuantity(quantity + 1);
@@ -58,14 +68,13 @@ export default function ProductScreen() {
         quantity: 1,
       });
     }
-    // ✅ Ouvre le modal au lieu de Alert
     setShowSuccess(true);
   };
 
   return (
     <View style={styles.container}>
       <Header
-        onCartPress={() => navigation.navigate("Panier")}
+        onCartPress={() => router.push("/(flow)/(app)/(tabs)/cart")}
         showBack={true}
       />
 
@@ -121,7 +130,6 @@ export default function ProductScreen() {
         </TouchableOpacity>
       </ScrollView>
 
-      {/* ✅ Modal succès — identique à celui de Confirmation */}
       <Modal visible={showSuccess} transparent animationType="fade">
         <View style={styles.overlay}>
           <View style={styles.modalBox}>
@@ -157,12 +165,11 @@ export default function ProductScreen() {
 
             <View style={styles.modalDivider} />
 
-            {/* Deux boutons : continuer ou aller au panier */}
             <TouchableOpacity
               style={[styles.modalBtn, { backgroundColor: "#e60023" }]}
               onPress={() => {
                 setShowSuccess(false);
-                navigation.navigate("Panier");
+                router.push("/(flow)/(app)/(tabs)/cart");
               }}
             >
               <Text style={styles.modalBtnText}>Voir le panier</Text>
@@ -235,8 +242,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   buttonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-
-  /* Modal — même style que Confirmation */
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.55)",
@@ -247,21 +252,21 @@ const styles = StyleSheet.create({
   modalBox: {
     backgroundColor: "#ffffff",
     borderRadius: 20,
-    padding: 18, // ✅ réduit de 24 → 18
-    width: "88%", // ✅ réduit de "100%" → "88%"
+    padding: 18,
+    width: "88%",
     alignItems: "center",
     elevation: 10,
   },
   modalIconCircle: {
-    width: 52, // ✅ réduit de 70 → 52
-    height: 52, // ✅ réduit de 70 → 52
+    width: 52,
+    height: 52,
     borderRadius: 26,
     backgroundColor: "#f0fff4",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 12, // ✅ réduit de 16 → 12
+    marginBottom: 12,
   },
-  modalIcon: { fontSize: 26 }, // ✅ réduit de 34 → 26
+  modalIcon: { fontSize: 26 },
   modalTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -281,20 +286,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     width: "100%",
     marginVertical: 8,
-  }, // ✅ marginVertical 12 → 8
+  },
   modalRecap: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
     paddingVertical: 3,
   },
-  modalRecapLabel: { fontSize: 13, color: "#888" }, // ✅ 14 → 13
+  modalRecapLabel: { fontSize: 13, color: "#888" },
   modalRecapValue: { fontSize: 13, fontWeight: "bold", color: "#111" },
   modalBtn: {
     width: "100%",
     paddingVertical: 12,
     borderRadius: 12,
     alignItems: "center",
-  }, // ✅ 14 → 12
-  modalBtnText: { color: "#fff", fontWeight: "bold", fontSize: 14 }, // ✅ 15 → 14
+  },
+  modalBtnText: { color: "#fff", fontWeight: "bold", fontSize: 14 },
 });

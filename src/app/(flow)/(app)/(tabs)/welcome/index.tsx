@@ -1,5 +1,5 @@
-import Header from "@/components/Header";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import Header from "@/src/components/Header";
+import { useRouter } from "expo-router";
 import React, { useEffect, useRef } from "react";
 
 import {
@@ -15,23 +15,12 @@ import {
 
 const { width } = Dimensions.get("window");
 
-type RootStackParamList = {
-  Accueil: undefined;
-  Produit: { product: Product };
-  Panier: undefined;
-};
-
 type Product = {
   id: string;
   title: string;
   price: string;
   image: string;
 };
-
-type HomeScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  "Accueil"
->;
 
 const bannerImages = [
   "https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1200&q=60",
@@ -84,11 +73,8 @@ const products: Product[] = [
   },
 ];
 
-export default function HomeScreen({
-  navigation,
-}: {
-  navigation: HomeScreenNavigationProp;
-}) {
+export default function HomeScreen() {
+  const router = useRouter();
   const bannerRef = useRef<FlatList>(null);
   let currentIndex = 0;
 
@@ -110,10 +96,10 @@ export default function HomeScreen({
   return (
     <View style={styles.container}>
       <Header
-  title="Accueil"
-  onCartPress={() => navigation.navigate("Panier")}
-  showBack={false} // ← pas de flèche
-/>
+        title="Accueil"
+        onCartPress={() => router.push("/(flow)/(app)/(tabs)/cart")}
+        showBack={false} // ← pas de flèche
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Bannière auto-scroll */}
         <FlatList
@@ -139,7 +125,12 @@ export default function HomeScreen({
             <TouchableOpacity
               style={styles.card}
               activeOpacity={0.8}
-              onPress={() => navigation.navigate("Produit", { product: item })}
+              onPress={() =>
+                router.push({
+                  pathname: "/(flow)/(app)/(tabs)/product/detail",
+                  params: { product: JSON.stringify(item) },
+                })
+              }
             >
               <Image source={{ uri: item.image }} style={styles.image} />
               <Text numberOfLines={1} style={styles.title}>

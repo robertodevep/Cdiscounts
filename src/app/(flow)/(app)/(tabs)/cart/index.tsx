@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import Header from "@/src/components/Header";
 import { useRouter } from "expo-router";
 import React, { useContext } from "react";
 import {
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { CartContext } from "../../context/CartContext";
+import { CartContext } from "@/src/context/CartContext";
 
 export default function CartScreen() {
   const cartContext = useContext(CartContext);
@@ -25,7 +25,7 @@ export default function CartScreen() {
     if (cart.length === 0) return;
 
     router.push({
-      pathname: "/paiement",
+      pathname: "/(flow)/(app)/payment",
       params: {
         total: total.toString(),
         cart: JSON.stringify(cart),

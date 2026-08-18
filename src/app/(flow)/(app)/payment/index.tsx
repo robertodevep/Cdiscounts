@@ -1,15 +1,7 @@
-
-
-import Header from "@/components/Header";
+import Header from "@/src/components/Header";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native"; // reac
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"; // reac
 
 const methods = [
   {
@@ -24,7 +16,8 @@ const methods = [
     color: "#FFCC00",
     bg: "#FFFBEA",
     border: "#FFCC00",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy7YG35PV-YIh5oFbeYni8Ncam7c8oidlqvA&s",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy7YG35PV-YIh5oFbeYni8Ncam7c8oidlqvA&s",
   },
   {
     name: "AfrikPay",
@@ -40,14 +33,15 @@ export default function ChoixPaiement() {
   const { total, cart } = useLocalSearchParams();
   const [selected, setSelected] = useState<string | null>(null);
 
- const handleNext = () => {
-  if (!selected) return;
-  router.push({
-    // ✅ Chemin correct selon ta structure app/(tabs)/paiement/confirmation
-    pathname: "/(tabs)/paiement/confirmation" as never,
-    params: { total, cart, method: selected },
-  });
-};
+  const handleNext = () => {
+    if (!selected) return;
+    router.push({
+      // ✅ Chemin correct selon ta structure app/(tabs)/paiement/confirmation
+      //pathname: "/(tabs)/paiement/confirmation" as never,
+      pathname: "/(flow)/(app)/confirmation",
+      params: { total, cart, method: selected },
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -85,16 +79,20 @@ export default function ChoixPaiement() {
                     resizeMode="cover"
                   />
                 </View>
-                <Text style={[
-                  styles.cardLabel,
-                  isSelected && { color: method.color, fontWeight: "800" }
-                ]}>
+                <Text
+                  style={[
+                    styles.cardLabel,
+                    isSelected && { color: method.color, fontWeight: "800" },
+                  ]}
+                >
                   {method.name}
                 </Text>
 
                 {/* Indicateur sélectionné */}
                 {isSelected && (
-                  <View style={[styles.checkDot, { backgroundColor: method.color }]}>
+                  <View
+                    style={[styles.checkDot, { backgroundColor: method.color }]}
+                  >
                     <Text style={styles.checkMark}>✓</Text>
                   </View>
                 )}
@@ -165,7 +163,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
 
- logoContainer: {
+  logoContainer: {
     width: 60,
     height: 60,
     borderRadius: 12,
