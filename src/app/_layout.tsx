@@ -7,10 +7,10 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/src/hooks/use-color-scheme";
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  anchor: "(flow)",
 };
 
 export default function RootLayout() {
@@ -19,7 +19,7 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(flow)" options={{ headerShown: false }} />
         <Stack.Screen
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}
