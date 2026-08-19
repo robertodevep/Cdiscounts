@@ -96,7 +96,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Header
-        title="Accueil"
+        
         onCartPress={() => router.push("/(flow)/(app)/(tabs)/cart")}
         showBack={false} // ← pas de flèche
       />
