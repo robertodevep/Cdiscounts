@@ -84,7 +84,7 @@ export default function ProductListScreen() {
 
   return (
     <View style={styles.container}>
-      <Header title="Produits" showBack={false} />
+      <Header showBack={true} />
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
