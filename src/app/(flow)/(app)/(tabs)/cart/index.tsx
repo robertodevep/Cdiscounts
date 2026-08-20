@@ -1,3 +1,6 @@
+
+
+
 import Header from "@/src/components/Header";
 import { useRouter } from "expo-router";
 import React, { useContext } from "react";
@@ -167,9 +170,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontWeight: "bold",
+    fontWeight: "400",
     fontSize: 15,
-    color: "#111",
+    //color: "#111",
   },
 
   variant: {
@@ -179,7 +182,7 @@ const styles = StyleSheet.create({
   },
 
   price: {
-    color: "#e60023",
+    color: "#1d8a45",
     fontWeight: "bold",
     fontSize: 15,
     marginTop: 4,
@@ -236,11 +239,11 @@ const styles = StyleSheet.create({
   totalAmount: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#e60023",
+    color: "#1d8a45",
   },
 
   payButton: {
-    backgroundColor: "#e60023",
+    backgroundColor: "#1d8a45",
     paddingHorizontal: 28,
     paddingVertical: 12,
     borderRadius: 10,
@@ -252,7 +255,7 @@ const styles = StyleSheet.create({
 
   payButtonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "500",
     fontSize: 16,
   },
 });

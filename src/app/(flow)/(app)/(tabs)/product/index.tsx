@@ -27,7 +27,6 @@ type Product = {
   description: string;
 };
 
-
 const products: Product[] = [
   {
     id: "1",
@@ -73,7 +72,6 @@ const products: Product[] = [
       { label: "Rouge", price: 38000 },
     ],
   },
-
 
   {
     id: "6",
@@ -252,7 +250,8 @@ export default function ProductListScreen() {
 
   return (
     <View style={styles.container}>
-      <Header showBack={true}
+      <Header
+        showBack={true}
         onCartPress={() => router.push("/(flow)/(app)/(tabs)/cart")}
       />
       <FlatList
@@ -295,6 +294,6 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   image: { width: "100%", height: 130, borderRadius: 10 },
-  title: { marginTop: 8, fontWeight: "600", fontSize: 14 },
-  price: { color: "#e60023", marginTop: 5, fontWeight: "bold" },
+  title: { marginTop: 8, fontWeight: "400" },
+  price: { color: "#1d8a45", marginTop: 5, fontWeight: "bold" },
 });

@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: "500",
     margin: 15,
   },
   card: {
@@ -275,10 +275,11 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 8,
-    fontWeight: "600",
+    fontWeight: "400",
   },
   price: {
-    color: "#e60023",
+    //color: "#e60023",
+    color: "#1d8a45",// #1d8a45
     marginTop: 5,
     fontWeight: "bold",
   },

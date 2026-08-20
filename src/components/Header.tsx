@@ -14,7 +14,8 @@ import { CartContext } from "../context/CartContext";
 
 const HEADER_CONFIG = {
   backgroundColor: "#FFFFFF",
-  cartBadgeColor: "#E60023",
+  //cartBadgeColor: "#E60023",
+  cartBadgeColor: "#1d8a45",// #1d8a45
   cartBadgeTextColor: "#FFFFFF",
   backArrowColor: "#222222",
   headerHeight: 38,

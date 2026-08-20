@@ -1,7 +1,16 @@
+
 import Header from "@/src/components/Header";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"; // reac
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const methods = [
   {
@@ -19,25 +28,23 @@ const methods = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQy7YG35PV-YIh5oFbeYni8Ncam7c8oidlqvA&s",
   },
-  {
-    name: "AfrikPay",
-    color: "#0055CC",
-    bg: "#EEF4FF",
-    border: "#0055CC",
-    image: "https://afrikpay.com/assets/img/logo.png",
-  },
 ];
 
 export default function ChoixPaiement() {
   const router = useRouter();
   const { total, cart } = useLocalSearchParams();
   const [selected, setSelected] = useState<string | null>(null);
+  const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+
+  // Largeur de carte adaptative : 2 colonnes, avec un plafond pour les tablettes
+  const isTablet = width >= 600;
+  //const cardWidth = isTablet ? 220 : (width - 20 * 2 - 16) / 2;
+  const cardWidth = isTablet ? 140 : 125;
 
   const handleNext = () => {
     if (!selected) return;
     router.push({
-      // ✅ Chemin correct selon ta structure app/(tabs)/paiement/confirmation
-      //pathname: "/(tabs)/paiement/confirmation" as never,
       pathname: "/(flow)/(app)/confirmation",
       params: { total, cart, method: selected },
     });
@@ -56,8 +63,13 @@ export default function ChoixPaiement() {
 
         <Text style={styles.sectionTitle}>Moyen de paiement</Text>
 
-        {/* Grille 3 colonnes comme l'image */}
-        <View style={styles.grid}>
+        {/* Grille 2 colonnes, centrée, responsive */}
+        <View
+          style={[
+            styles.grid,
+            isTablet && { justifyContent: "center", gap: 20 },
+          ]}
+        >
           {methods.map((method) => {
             const isSelected = selected === method.name;
             return (
@@ -65,6 +77,7 @@ export default function ChoixPaiement() {
                 key={method.name}
                 style={[
                   styles.card,
+                  { width: cardWidth, minWidth: 0 },
                   { borderColor: isSelected ? method.border : "#e0e0e0" },
                   isSelected && { backgroundColor: method.bg },
                 ]}
@@ -84,6 +97,8 @@ export default function ChoixPaiement() {
                     styles.cardLabel,
                     isSelected && { color: method.color, fontWeight: "800" },
                   ]}
+                  numberOfLines={1}
+                  adjustsFontSizeToFit
                 >
                   {method.name}
                 </Text>
@@ -102,8 +117,13 @@ export default function ChoixPaiement() {
         </View>
       </View>
 
-      {/* Bouton Suivant fixe en bas */}
-      <View style={styles.footer}>
+      {/* Bouton Suivant fixe en bas, adapté à la safe area de chaque téléphone */}
+      <View
+        style={[
+          styles.footer,
+          { paddingBottom: Math.max(insets.bottom, 16) },
+        ]}
+      >
         <TouchableOpacity
           style={[styles.nextBtn, !selected && styles.nextBtnDisabled]}
           activeOpacity={0.85}
@@ -120,7 +140,7 @@ export default function ChoixPaiement() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f2f2f2",
   },
 
   content: {
@@ -139,20 +159,20 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     fontSize: 17,
-    fontWeight: "bold",
-    color: "#111",
+    fontWeight: "400",
+    //color: "#111",
     marginBottom: 16,
   },
 
-  /* Grille 3 colonnes */
-  grid: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 10,
-  },
+  /* Grille responsive, 2 colonnes */
+ grid: {
+  flexDirection: "row",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: 16,
+},
 
-  card: {
-    flex: 1,
+  /*card: {
     alignItems: "center",
     paddingVertical: 16,
     paddingHorizontal: 8,
@@ -161,7 +181,17 @@ const styles = StyleSheet.create({
     borderColor: "#e0e0e0",
     backgroundColor: "#fafafa",
     position: "relative",
-  },
+  },*/
+  card: {
+  alignItems: "center",
+  paddingVertical: 12,
+  paddingHorizontal: 6,
+  borderRadius: 14,
+  borderWidth: 2,
+  borderColor: "#e0e0e0",
+  backgroundColor: "#fafafa",
+  position: "relative",
+},
 
   logoContainer: {
     width: 60,
@@ -189,6 +219,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
     textAlign: "center",
+    maxWidth: "100%",
   },
 
   checkDot: {
@@ -211,7 +242,6 @@ const styles = StyleSheet.create({
   /* Bouton bas */
   footer: {
     paddingHorizontal: 20,
-    paddingBottom: 250,
     paddingTop: 12,
     backgroundColor: "#ffffff",
     borderTopWidth: 1,
@@ -219,7 +249,8 @@ const styles = StyleSheet.create({
   },
 
   nextBtn: {
-    backgroundColor: "#1a3ccc",
+    //backgroundColor: "#1a3ccc",
+    backgroundColor: "#1d8a45",
     borderRadius: 30,
     paddingVertical: 16,
     alignItems: "center",
@@ -236,3 +267,5 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
+
+
