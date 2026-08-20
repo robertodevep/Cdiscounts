@@ -16,6 +16,7 @@ type CartContextType = {
   cart: CartItem[];
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: string, variant: string) => void;
+  clearCart: () => void;
 };
 
 export const CartContext = createContext<CartContextType | null>(null);
@@ -65,8 +66,12 @@ export const CartProvider = ({ children }: any) => {
     saveCart(newCart);
   };
 
+  const clearCart = () => {
+    saveCart([]);
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

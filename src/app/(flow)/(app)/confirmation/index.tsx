@@ -1,6 +1,7 @@
 import Header from "@/src/components/Header";
+import { CartContext } from "@/src/context/CartContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   Modal,
   ScrollView,
@@ -16,6 +17,7 @@ export default function Confirmation() {
   const router = useRouter();
   const [phone, setPhone] = useState("");
   const [modal, setModal] = useState<"error" | "success" | null>(null);
+  const cartContext = useContext(CartContext);
 
   const parsedCart = JSON.parse(cart as string);
 
@@ -31,6 +33,7 @@ export default function Confirmation() {
       setModal("error");
       return;
     }
+    cartContext?.clearCart();
     setModal("success");
   };
 

@@ -54,19 +54,19 @@ export default function ProductDetailScreen() {
   }, [rawProduct]); */
   const params = useLocalSearchParams();
 
-  const rawProduct = params.product;
+const rawProduct = params.product;
 
-  let product: Product | null = null;
+let product: Product | null = null;
 
-  try {
-    if (typeof rawProduct === "string") {
-      product = JSON.parse(rawProduct);
-    } else if (Array.isArray(rawProduct)) {
-      product = JSON.parse(rawProduct[0]);
-    }
-  } catch (error) {
-    console.log("Erreur parsing produit :", error);
+try {
+  if (typeof rawProduct === "string") {
+    product = JSON.parse(rawProduct);
+  } else if (Array.isArray(rawProduct)) {
+    product = JSON.parse(rawProduct[0]);
   }
+} catch (error) {
+  console.log("Erreur parsing produit :", error);
+}
 
   const cartContext = useContext(CartContext);
 
@@ -90,13 +90,14 @@ export default function ProductDetailScreen() {
       : [
           {
             label: "Standard",
-            price: Number(product.price.replace(/[^\d]/g, "")),
+            price: Number(
+              product.price.replace(/[^\d]/g, "")
+            ),
           },
         ];
 
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant>(
-    variants[0],
-  );
+  const [selectedVariant, setSelectedVariant] =
+    useState<ProductVariant>(variants[0]);
 
   const add = () => {
     setQuantity((current) => current + 1);
@@ -128,9 +129,10 @@ export default function ProductDetailScreen() {
   return (
     <View style={styles.container}>
       <Header
+        onCartPress={() =>
+          router.push("/(flow)/(app)/(tabs)/cart")
+        }
         showBack={true}
-        onBackPress={() => router.replace("/(flow)/(app)/(tabs)/product")}
-        onCartPress={() => router.push("/(flow)/(app)/(tabs)/cart")}
       />
 
       {/* =========================
@@ -164,13 +166,16 @@ export default function ProductDetailScreen() {
 
           <View style={styles.variantContainer}>
             {variants.map((variant) => {
-              const selected = selectedVariant.label === variant.label;
+              const selected =
+                selectedVariant.label === variant.label;
 
               return (
                 <TouchableOpacity
                   key={variant.label}
                   activeOpacity={0.8}
-                  onPress={() => setSelectedVariant(variant)}
+                  onPress={() =>
+                    setSelectedVariant(variant)
+                  }
                   style={[
                     styles.variantButton,
                     selected && styles.variantSelected,
@@ -178,7 +183,9 @@ export default function ProductDetailScreen() {
                 >
                   <Text
                     style={
-                      selected ? styles.variantTextSelected : styles.variantText
+                      selected
+                        ? styles.variantTextSelected
+                        : styles.variantText
                     }
                   >
                     {variant.label}
@@ -194,7 +201,9 @@ export default function ProductDetailScreen() {
           </Text>
 
           {/* QUANTITÉ */}
-          <Text style={styles.quantityLabel}>Quantité</Text>
+          <Text style={styles.quantityLabel}>
+            Quantité
+          </Text>
 
           <View style={styles.qtyContainer}>
             <TouchableOpacity
@@ -244,17 +253,23 @@ export default function ProductDetailScreen() {
               <Text style={styles.modalIcon}>✓</Text>
             </View>
 
-            <Text style={styles.modalTitle}>Ajouté au panier</Text>
+            <Text style={styles.modalTitle}>
+              Ajouté au panier
+            </Text>
 
             <Text style={styles.modalMessage}>
-              <Text style={styles.modalProductName}>{product.title}</Text> a été
-              ajouté à votre panier avec succès.
+              <Text style={styles.modalProductName}>
+                {product.title}
+              </Text>{" "}
+              a été ajouté à votre panier avec succès.
             </Text>
 
             <View style={styles.modalDivider} />
 
             <View style={styles.modalRecap}>
-              <Text style={styles.modalRecapLabel}>Option</Text>
+              <Text style={styles.modalRecapLabel}>
+                Option
+              </Text>
 
               <Text style={styles.modalRecapValue}>
                 {selectedVariant.label}
@@ -262,41 +277,63 @@ export default function ProductDetailScreen() {
             </View>
 
             <View style={styles.modalRecap}>
-              <Text style={styles.modalRecapLabel}>Quantité</Text>
+              <Text style={styles.modalRecapLabel}>
+                Quantité
+              </Text>
 
-              <Text style={styles.modalRecapValue}>x{quantity}</Text>
+              <Text style={styles.modalRecapValue}>
+                x{quantity}
+              </Text>
             </View>
 
             <View style={styles.modalRecap}>
-              <Text style={styles.modalRecapLabel}>Prix</Text>
+              <Text style={styles.modalRecapLabel}>
+                Prix
+              </Text>
 
-              <Text style={[styles.modalRecapValue, styles.modalPrice]}>
-                {(selectedVariant.price * quantity).toLocaleString()} FCFA
+              <Text
+                style={[
+                  styles.modalRecapValue,
+                  styles.modalPrice,
+                ]}
+              >
+                {(
+                  selectedVariant.price * quantity
+                ).toLocaleString()}{" "}
+                FCFA
               </Text>
             </View>
 
             <View style={styles.modalDivider} />
 
             <TouchableOpacity
-              style={[styles.modalBtn, styles.modalPrimaryBtn]}
+              style={[
+                styles.modalBtn,
+                styles.modalPrimaryBtn,
+              ]}
               onPress={() => {
                 setShowSuccess(false);
 
-                router.push("/(flow)/(app)/(tabs)/cart");
+                router.push(
+                  "/(flow)/(app)/(tabs)/cart"
+                );
               }}
             >
-              <Text style={styles.modalBtnText}>Voir le panier</Text>
+              <Text style={styles.modalBtnText}>
+                Voir le panier
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.modalBtn, styles.modalSecondaryBtn]}
-              onPress={() => { setShowSuccess(false);
-                router.push("/(flow)/(app)/(tabs)/product");
-              }
-                 
-              }
+              style={[
+                styles.modalBtn,
+                styles.modalSecondaryBtn,
+              ]}
+              onPress={() => setShowSuccess(false)}
             >
-              <Text style={styles.modalBtnText}>Continuer les achats</Text>
+              <Text style={styles.modalBtnText}>
+                Continuer les achats
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

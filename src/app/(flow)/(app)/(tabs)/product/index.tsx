@@ -266,8 +266,7 @@ export default function ProductListScreen() {
             activeOpacity={0.8}
             onPress={() =>
               router.push({
-                //pathname: "/(flow)/(app)/(tabs)/product/detail",
-                pathname: "/(flow)/(app)/(tabs)/product/detail",
+                pathname: "/(flow)/(app)/product-detail",
                 params: { product: JSON.stringify(item) },
               })
             }

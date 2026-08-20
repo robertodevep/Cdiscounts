@@ -220,9 +220,15 @@ export default function HomeScreen() {
             <TouchableOpacity
               style={styles.card}
               activeOpacity={0.8}
+              // onPress={() =>
+              //   router.push({
+              //     pathname: "/(flow)/product-detail",
+              //     params: { product: JSON.stringify(item) },
+              //   })
+              // }
               onPress={() =>
                 router.push({
-                  pathname: "/(flow)/(app)/(tabs)/product/detail",
+                  pathname: "/(flow)/(app)/product-detail",
                   params: { product: JSON.stringify(item) },
                 })
               }
