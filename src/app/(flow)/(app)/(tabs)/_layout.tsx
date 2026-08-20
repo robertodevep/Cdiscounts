@@ -5,7 +5,6 @@ import React from "react";
 import { HapticTab } from "@/src/components/haptic-tab";
 import { IconSymbol } from "@/src/components/ui/icon-symbol";
 import { Colors } from "@/src/constants/theme";
-import { CartProvider } from "@/src/context/CartContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColorScheme } from "@/src/hooks/use-color-scheme";
 
@@ -15,7 +14,6 @@ export default function TabLayout() {
   const bottomInset = insets.bottom;
 
   return (
-    <CartProvider>
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -83,6 +81,5 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-    </CartProvider>
   );
 }

@@ -1,6 +1,7 @@
 import { Stack, useRouter } from "expo-router";
 import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
+import { CartProvider } from "@/src/context/CartContext";
 
 export default function FlowLayout() {
   const router = useRouter();
@@ -16,6 +17,8 @@ export default function FlowLayout() {
   }, []);
 
   return (
-    <Stack screenOptions={{ headerShown: false }} />
+    <CartProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </CartProvider>
   );
 }

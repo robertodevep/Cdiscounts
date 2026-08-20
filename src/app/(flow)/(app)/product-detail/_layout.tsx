@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
+import React from "react";
 
-export default function layout() {
+export default function ProductDetailLayout() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
