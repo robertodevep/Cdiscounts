@@ -1,3 +1,3 @@
 import { ImageSourcePropType } from "react-native";
 
-export const LOGO: ImageSourcePropType = require("../../assets/images/kr.png");
+export const LOGO: ImageSourcePropType = require("../../assets/images/krBg.png");

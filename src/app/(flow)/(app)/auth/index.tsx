@@ -5,6 +5,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   Keyboard,
   KeyboardEvent,
@@ -19,6 +20,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LOGO } from "@/src/constants";
+import Header from "@/src/components/Header";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -111,23 +113,15 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <Header title="Login" showBack={true} showCart={false} />
       <ScrollView
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: insets.top + 40, paddingBottom: keyboardHeight + 40 },
+          { paddingTop: insets.top + 10, paddingBottom: keyboardHeight + 40 },
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Bouton retour */}
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => router.back()}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Text style={styles.backIcon}>‹</Text>
-        </TouchableOpacity>
-
         {/* Logo / Branding */}
         <View style={styles.brandWrap}>
           <View style={styles.logoCircle}>
@@ -179,7 +173,14 @@ export default function Login() {
 
           {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
 
-          <TouchableOpacity style={styles.forgotBtn}>
+          <TouchableOpacity style={styles.forgotBtn}
+           onPress={() => {
+              Alert.alert(
+                "Password",
+                "Cette fonctionnalité n'est pas encore disponible.",
+              );
+            }}
+          >
             <Text style={styles.forgotText}>Mot de passe oublié ?</Text>
           </TouchableOpacity>
 
@@ -209,7 +210,13 @@ export default function Login() {
             style={styles.googleBtn}
             activeOpacity={0.85}
             disabled={!request}
-            onPress={() => promptAsync()}
+            //onPress={() => promptAsync()}
+            onPress={() => {
+              Alert.alert(
+                "Google",
+                "Cette fonctionnalité n'est pas encore disponible.",
+              );
+            }}
           >
             <Text style={styles.googleIcon}>G</Text>
             <Text style={styles.googleBtnText}>Continuer avec Google</Text>
@@ -228,11 +235,10 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    //backgroundColor: "#ffffff" 
-    backgroundColor: "#f2f2f2" 
-
+  container: {
+    flex: 1,
+    //backgroundColor: "#ffffff"
+    backgroundColor: "#f2f2f2",
   },
 
   scrollContent: { paddingHorizontal: 24 },
@@ -248,32 +254,36 @@ const styles = StyleSheet.create({
   },
   backIcon: { fontSize: 26, color: "#585555", marginTop: -2 },
 
-  brandWrap: { alignItems: "center", marginBottom: 32 },
+  brandWrap: {
+    alignItems: "center",
+    marginBottom: 30,
+    marginTop: 0,
+  },
   logoCircle: {
-    width: 64,
+    //width: 64,
     height: 64,
-    borderRadius: 20,
-    backgroundColor: "#1a3ccc",
+    //borderRadius: 20,
+    //backgroundColor: "#1a3ccc",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 18,
-    elevation: 4,
-    shadowColor: "#1a3ccc",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 10,
+    //elevation: 4,
+    //shadowColor: "#1a3ccc",
+    //shadowOffset: { width: 0, height: 4 },
+    //shadowOpacity: 0.25,
+    //shadowRadius: 10,
   },
   logo: {
     width: 205,
     height: 120,
   },
-   
+
   logoText: { color: "#fff", fontSize: 22, fontWeight: "800" },
   title: {
-    fontSize: 22,
-    fontWeight: "800",
+    fontSize: 20,
+    fontWeight: "400",
     //color: "#111",
-    color: "#5a4e4e",
+    //color: "#5a4e4e",
     marginBottom: 8,
     textAlign: "center",
   },
@@ -288,8 +298,8 @@ const styles = StyleSheet.create({
 
   form: { gap: 0 },
   label: {
-    fontSize: 13,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "400",
     color: "#333",
     marginBottom: 8,
   },
@@ -321,10 +331,11 @@ const styles = StyleSheet.create({
   },
 
   forgotBtn: { alignSelf: "flex-end", marginTop: 12, marginBottom: 22 },
-  forgotText: { color: "#1a3ccc", fontSize: 13, fontWeight: "600" },
+  forgotText: { color: "#1d8a45", fontSize: 13, fontWeight: "600" },
 
   loginBtn: {
-    backgroundColor: "#1a3ccc",
+    //backgroundColor: "#1a3ccc",
+    backgroundColor: "#1d8a45", //#1d8a45
     borderRadius: 30,
     paddingVertical: 16,
     alignItems: "center",
@@ -335,7 +346,7 @@ const styles = StyleSheet.create({
   loginBtnText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "500",
     letterSpacing: 0.5,
   },
 
@@ -366,7 +377,7 @@ const styles = StyleSheet.create({
     width: 20,
     textAlign: "center",
   },
-  googleBtnText: { fontSize: 15, fontWeight: "700", color: "#333" },
+  googleBtnText: { fontSize: 15, fontWeight: "500", color: "#333" },
 
   footerNote: {
     fontSize: 12,
