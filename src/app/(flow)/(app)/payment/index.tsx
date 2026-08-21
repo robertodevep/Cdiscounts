@@ -1,4 +1,3 @@
-
 import Header from "@/src/components/Header";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -42,10 +41,18 @@ export default function ChoixPaiement() {
   //const cardWidth = isTablet ? 220 : (width - 20 * 2 - 16) / 2;
   const cardWidth = isTablet ? 140 : 125;
 
+  // const handleNext = () => {
+  //   if (!selected) return;
+  //   router.push({
+  //     pathname: "/(flow)/(app)/confirmation",
+  //     params: { total, cart, method: selected },
+  //   });
+  // };
+
   const handleNext = () => {
     if (!selected) return;
     router.push({
-      pathname: "/(flow)/(app)/confirmation",
+      pathname: "/auth",
       params: { total, cart, method: selected },
     });
   };
@@ -119,10 +126,7 @@ export default function ChoixPaiement() {
 
       {/* Bouton Suivant fixe en bas, adapté à la safe area de chaque téléphone */}
       <View
-        style={[
-          styles.footer,
-          { paddingBottom: Math.max(insets.bottom, 16) },
-        ]}
+        style={[styles.footer, { paddingBottom: Math.max(insets.bottom, 16) }]}
       >
         <TouchableOpacity
           style={[styles.nextBtn, !selected && styles.nextBtnDisabled]}
@@ -165,12 +169,12 @@ const styles = StyleSheet.create({
   },
 
   /* Grille responsive, 2 colonnes */
- grid: {
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: 16,
-},
+  grid: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
+  },
 
   /*card: {
     alignItems: "center",
@@ -183,15 +187,15 @@ const styles = StyleSheet.create({
     position: "relative",
   },*/
   card: {
-  alignItems: "center",
-  paddingVertical: 12,
-  paddingHorizontal: 6,
-  borderRadius: 14,
-  borderWidth: 2,
-  borderColor: "#e0e0e0",
-  backgroundColor: "#fafafa",
-  position: "relative",
-},
+    alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 6,
+    borderRadius: 14,
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+    backgroundColor: "#fafafa",
+    position: "relative",
+  },
 
   logoContainer: {
     width: 60,
@@ -267,5 +271,3 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 });
-
-
