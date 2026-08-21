@@ -40,6 +40,10 @@ const countries: Country[] = [
   { name: "Nigeria", dial: "+234", flag: "🇳🇬" },
 ];
 
+// Petit espace laissé au-dessus du champ après le scroll, pour ne pas
+// le coller à l'extrême bord de l'écran
+const SCROLL_TOP_GAP = 24;
+
 export default function Confirmation() {
   const { total, cart, method } = useLocalSearchParams();
   const router = useRouter();
@@ -52,6 +56,10 @@ export default function Confirmation() {
   const insets = useSafeAreaInsets();
   const scrollRef = useRef<ScrollView>(null);
 
+  // ✅ Position réelle (mesurée) de la carte "Numéro de paiement" dans le
+  // contenu scrollable — remplace le scrollToEnd() peu fiable
+  const [inputCardY, setInputCardY] = useState(0);
+
   const parsedCart = JSON.parse(cart as string);
 
   const methodColors: Record<string, string> = {
@@ -60,6 +68,16 @@ export default function Confirmation() {
     AfrikPay: "#0055CC",
   };
   const methodColor = methodColors[method as string] || "#e60023";
+
+  // ✅ Le numéro est valide seulement s'il contient exactement 9 chiffres
+  const isPhoneValid = phone.length === 9;
+
+  // ✅ Ne garde que les chiffres et bloque au-delà de 9 (l'utilisateur peut
+  // toujours effacer puis ressaisir normalement)
+  const handlePhoneChange = (text: string) => {
+    const digitsOnly = text.replace(/[^0-9]/g, "").slice(0, 9);
+    setPhone(digitsOnly);
+  };
 
   // ✅ Gestion manuelle du clavier (KeyboardAvoidingView non fiable sur TPE)
   useEffect(() => {
@@ -70,10 +88,6 @@ export default function Confirmation() {
 
     const showSub = Keyboard.addListener(showEvent, (e: KeyboardEvent) => {
       setKeyboardHeight(e.endCoordinates.height);
-      // Laisse le temps au layout de s'ajuster avant de scroller
-      setTimeout(() => {
-        scrollRef.current?.scrollToEnd({ animated: true });
-      }, 50);
     });
     const hideSub = Keyboard.addListener(hideEvent, () => {
       setKeyboardHeight(0);
@@ -85,8 +99,23 @@ export default function Confirmation() {
     };
   }, []);
 
+  // ✅ Scroll précis basé sur la position mesurée du champ, pas sur
+  // scrollToEnd(). S'adapte automatiquement à la hauteur de chaque écran
+  // et à la hauteur réelle du clavier de chaque téléphone.
+  useEffect(() => {
+    if (keyboardHeight > 0) {
+      const id = setTimeout(() => {
+        scrollRef.current?.scrollTo({
+          y: Math.max(inputCardY - SCROLL_TOP_GAP, 0),
+          animated: true,
+        });
+      }, 100);
+      return () => clearTimeout(id);
+    }
+  }, [keyboardHeight, inputCardY]);
+
   const handlePayment = () => {
-    if (!phone) {
+    if (!isPhoneValid) {
       setModal("error");
       return;
     }
@@ -99,6 +128,7 @@ export default function Confirmation() {
       <Header title="Confirmation" showBack={true} showCart={false} />
 
       <ScrollView
+        style={{ flex: 1 }}
         ref={scrollRef}
         contentContainerStyle={[
           styles.scrollContent,
@@ -159,7 +189,10 @@ export default function Confirmation() {
         </View>
 
         {/* Saisie numéro */}
-        <View style={styles.card}>
+        <View
+          style={styles.card}
+          onLayout={(e) => setInputCardY(e.nativeEvent.layout.y)}
+        >
           <Text style={styles.cardTitle}>Numéro de paiement</Text>
           <Text style={styles.inputHint}>
             Entrez le numéro associé à votre compte {method}
@@ -176,17 +209,12 @@ export default function Confirmation() {
             </TouchableOpacity>
             <TextInput
               placeholder="6X XX XX XX XX"
-              keyboardType="phone-pad"
+              keyboardType="number-pad"
               style={styles.input}
               value={phone}
-              onChangeText={setPhone}
+              onChangeText={handlePhoneChange}
               placeholderTextColor="#aaa"
               maxLength={9}
-              onFocus={() => {
-                setTimeout(() => {
-                  scrollRef.current?.scrollToEnd({ animated: true });
-                }, 100);
-              }}
             />
           </View>
         </View>
@@ -201,10 +229,10 @@ export default function Confirmation() {
           ]}
         >
           <TouchableOpacity
-            style={[styles.payBtn, !phone && styles.payBtnDisabled]}
+            style={[styles.payBtn, !isPhoneValid && styles.payBtnDisabled]}
             activeOpacity={0.85}
             onPress={handlePayment}
-            disabled={!phone}
+            disabled={!isPhoneValid}
           >
             <Text style={styles.payText}>Confirmer le paiement</Text>
           </TouchableOpacity>
@@ -266,9 +294,10 @@ export default function Confirmation() {
             >
               <Text style={styles.modalIcon}>⚠️</Text>
             </View>
-            <Text style={styles.modalTitle}>Champ requis</Text>
+            <Text style={styles.modalTitle}>Numéro invalide</Text>
             <Text style={styles.modalMessage}>
-              Veuillez entrer votre numéro de téléphone pour continuer.
+              Veuillez entrer un numéro de téléphone valide à 9 chiffres pour
+              continuer.
             </Text>
             <TouchableOpacity
               style={[styles.modalBtn, { backgroundColor: "#e60023" }]}
@@ -379,7 +408,7 @@ const styles = StyleSheet.create({
     borderColor: "#e5e5e5",
   },
   itemLeft: { flex: 1, paddingRight: 10, minWidth: 0 },
-  itemTitle: { fontSize: 14, fontWeight: "400",},
+  itemTitle: { fontSize: 14, fontWeight: "400" },
   itemVariant: { fontSize: 12, color: "#999", marginTop: 2 },
   itemRight: { alignItems: "flex-end", flexShrink: 0 },
   itemQty: { fontSize: 12, color: "#999" },
@@ -505,7 +534,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: "#f2f2f2",
   },
-  sheetCloseText: { fontSize: 15, fontWeight: "400", },
+  sheetCloseText: { fontSize: 15, fontWeight: "400" },
 
   /* ✅ Modal styles */
   overlay: {
@@ -559,8 +588,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   modalRecapLabel: { fontSize: 14, color: "#888" },
-  modalRecapValue: { fontSize: 14, fontWeight: "bold",  },
-  modalRecapValueNum: { fontSize: 14, fontWeight: "500",  },
+  modalRecapValue: { fontSize: 14, fontWeight: "bold" },
+  modalRecapValueNum: { fontSize: 14, fontWeight: "500" },
   modalBtn: {
     marginTop: 8,
     width: "100%",
@@ -570,5 +599,3 @@ const styles = StyleSheet.create({
   },
   modalBtnText: { color: "#fff", fontWeight: "bold", fontSize: 15 },
 });
-
-
