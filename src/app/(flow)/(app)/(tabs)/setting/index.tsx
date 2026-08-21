@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatarText: { color: "#fff", fontSize: 22, fontWeight: "500" },
-  profileName: { fontSize: 16, fontWeight: "400", color: "#222"},
+  profileName: { fontSize: 16, fontWeight: "400", color: "#222" },
   profileEmail: { fontSize: 13, color: "#888", marginTop: 2 },
   editBtn: {
     borderWidth: 1.5,
